@@ -3,45 +3,33 @@ class Product:
         self.name = name
         self.price = price
         self.quantity = quantity
-
     def __str__(self):
         return f"{self.name} - {self.price} грн. - {self.quantity} шт."
-
-
 class Cart:
     def __init__(self):
         self.items = []
         self.total = 0
-
     def add_item(self, item):
         self.items.append(item)
         self.total += item.price
-
     def remove_item(self, item):
         self.items.remove(item)
         self.total -= item.price
-
     def show_items(self):
         print("Товари у вашому кошику:")
         for item in self.items:
             print(item)
-
     def clear_items(self):
         self.items = []
         self.total = 0
-
-
 class User:
     def __init__(self, name, username, password, role="user"):
         self.name = name
         self.username = username
         self.password = password
         self.role = role
-
     def is_admin(self):
         return self.role == "admin"
-
-
 class CashRegister:
     def __init__(self):
         self.products = []
@@ -50,7 +38,6 @@ class CashRegister:
         self.users = []
         self.load_users()
         self.load_products()
-
     def load_users(self):
         try:
             with open("users.txt", "r") as file:
@@ -61,12 +48,10 @@ class CashRegister:
         except FileNotFoundError:
             print("Файл users.txt не знайдено. Створюю новий файл.")
             self.save_users()
-
     def save_users(self):
         with open("users.txt", "w") as file:
             for user in self.users:
                 file.write(f"{user.name},{user.username},{user.password},{user.role}\n")
-
     def load_products(self):
         try:
             with open("products.txt", "r") as file:
