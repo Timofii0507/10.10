@@ -77,27 +77,21 @@ class CashRegister:
         except FileNotFoundError:
             print("Файл products.txt не знайдено. Створюю новий файл.")
             self.save_products()
-
     def save_products(self):
         with open("products.txt", "w") as file:
             for product in self.products:
                 file.write(f"{product.name},{product.price},{product.quantity}\n")
-
     def login(self):
         username = input("Введіть логін: ")
         password = input("Введіть пароль: ")
-
         for user in self.users:
             if user.username == username and user.password == password:
                 self.user = user
                 print(f"Ви увійшли в систему, {user.name} ({user.role})!")
                 return
-
         print("Неправильний логін або пароль. Спробуйте ще раз.")
-
     def run(self):
         print("Вітаємо вас у додатку \"Касовий апарат\"")
-
         while True:
             print("Меню:")
             print("1. Зареєструватись в системі")
@@ -109,7 +103,6 @@ class CashRegister:
             print("7. Змінити інформацію про товар (тільки для адміністратора)")
             print("8. Вийти з системи")
             choice = input("Введіть ваш вибір: ")
-
             if choice == "1":
                 self.register_user()
             elif choice == "2":
@@ -137,7 +130,6 @@ class CashRegister:
                 break
             else:
                 print("Неправильний вибір, спробуйте ще раз")
-
     def register_user(self):
         name = input("Введіть ваше ім'я: ")
         username = input("Введіть логін: ")
@@ -149,11 +141,8 @@ class CashRegister:
         user = User(name, username, password, role)
         self.users.append(user)
         print(f"Ви успішно зареєструвалися в системі, {name} ({role})!")
-
-        # Зберігаємо нового користувача у файл
         with open("users.txt", "a") as file:
             file.write(f"{user.name},{user.username},{user.password},{user.role}\n")
-
     def add_product(self):
         try:
             name = input("Введіть назву товару: ")
@@ -162,20 +151,15 @@ class CashRegister:
         except ValueError:
             print("Некоректне введення. Будь ласка, введіть числові значення.")
             return
-
         product = Product(name, price, quantity)
         self.products.append(product)
         print(f"Ви додали новий товар: {product}")
-
-        # Зберігаємо новий товар у файл
         with open("products.txt", "a") as file:
             file.write(f"{product.name},{product.price},{product.quantity}\n")
-
     def edit_product(self):
         if not self.user or not self.user.is_admin():
             print("Доступ заборонений. Тільки адміністратор може змінювати товари.")
             return
-
         self.show_products()
         try:
             index = int(input("Введіть номер товару, який хочете змінити: "))
@@ -183,14 +167,11 @@ class CashRegister:
         except (ValueError, IndexError):
             print("Некоректний номер товару. Будь ласка, введіть дійсне число.")
             return
-
         print(f"Ви обрали товар: {product}")
         new_name = input("Введіть нову назву товару або натисніть Enter, щоб залишити стару: ")
-
         if self.user.is_admin():
             new_price = input("Введіть нову ціну товару або натисніть Enter, щоб залишити стару: ")
             new_quantity = input("Введіть нову кількість товару або натисніть Enter, щоб залишити стару: ")
-
             if new_name:
                 product.name = new_name
             if new_price:
@@ -207,20 +188,16 @@ class CashRegister:
             if new_name:
                 print("Недостатньо прав для зміни інших параметрів товару.")
                 return
-
         print(f"Ви змінили товар: {product}")
         self.save_products()
-
     def show_products(self):
         print("Доступні товари:")
         for i, product in enumerate(self.products):
             print(f"{i + 1}. {product}")
-
     def buy_product(self):
         if not self.user:
             print("Будь ласка, увійдіть в систему.")
             return
-
         self.show_products()
         try:
             index = int(input("Введіть номер товару, який хочете купити: "))
@@ -228,20 +205,16 @@ class CashRegister:
         except (ValueError, IndexError):
             print("Некоректний номер товару. Будь ласка, введіть дійсне число.")
             return
-
         if product.quantity <= 0:
             print(f"На жаль, товар {product.name} закінчився")
             return
-
         self.cart.add_item(product)
         product.quantity -= 1
         print(f"Ви додали товар {product.name} у ваш кошик")
-
     def pay(self):
         if not self.user:
             print("Будь ласка, увійдіть в систему.")
             return
-
         self.cart.show_items()
         print(f"Загальна сума до оплати: {self.cart.total} грн.")
         try:
@@ -249,7 +222,6 @@ class CashRegister:
         except ValueError:
             print("Некоректне введення. Будь ласка, введіть числове значення.")
             return
-
         if cash >= self.cart.total:
             change = cash - self.cart.total
             print(f"Ваша решта: {change} грн.")
@@ -257,8 +229,6 @@ class CashRegister:
             print("Дякуємо за покупку!")
         else:
             print("Ви ввели недостатню суму")
-
-
 if __name__ == "__main__":
     cash_register = CashRegister()
     cash_register.run()
